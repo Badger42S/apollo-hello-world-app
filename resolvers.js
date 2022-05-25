@@ -1,16 +1,8 @@
 import { PubSub } from 'graphql-subscriptions';
 
-const pubsub = new PubSub();
+import { authors, books } from './simpleData.js'
 
-const authors =[
-    { id: 5, name: 'Lev', booksId:[1,3] },
-    { id: 6, name: 'Gorky', booksId:[2] }
-]
-const books = [
-    { id: 1, title: 'First' },
-    { id: 2, title: 'Second' },
-    { id: 3, title: 'Third' }
-];
+const pubsub = new PubSub();
 
 export const resolvers = {
     Query: {
