@@ -1,3 +1,7 @@
+import { PubSub } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
+
 const authors =[
     { id: 5, name: 'Lev', booksId:[1,3] },
     { id: 6, name: 'Gorky', booksId:[2] }
@@ -57,15 +61,24 @@ export const resolvers = {
         },
         addBook(_, args) {
             const nextBookId = books[books.length - 1].id + 1;
-            books.push({
+            const newBook = {
                 id: nextBookId,
                 title: args.title,
-                author: args?.author
-            });
+            };
+            books.push(newBook);
 
             const author = authors.find(el => el.name === args?.author.name);
             author.booksId.push(nextBookId);
+
+            pubsub.publish('BOOK_INSERT', {
+                bookInsert: newBook
+            });
             return books;
+        }
+    },
+    Subscription: {
+        bookInsert: {
+            subscribe: () => pubsub.asyncIterator(['BOOK_INSERT']),
         }
     }
 };
