@@ -59,7 +59,16 @@ export const resolvers = {
             };
             books.push(newBook);
 
-            const author = authors.find(el => el.name === args?.author.name);
+            let author = authors.find(el => el.name === args?.author.name);
+            if(!author) {
+                const nextAuthorId = authors[authors.length - 1].id + 1;
+                const newLength = authors.push({
+                    id: nextAuthorId,
+                    name: args.author.name,
+                    booksId: [],
+                });
+                author = authors[newLength - 1];
+            }
             author.booksId.push(nextBookId);
 
             pubsub.publish('BOOK_INSERT', {
