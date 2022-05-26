@@ -15,11 +15,14 @@ const schema = makeExecutableSchema({ typeDefs,resolvers });
 
 const startApolloServer = async schema => {
     const app = express();
+    app.use("/v1", (req, res) => {
+      res.send("<h1>Express</h1>");
+    });
     const httpServer = http.createServer(app);
 
     const wsServer = new WebSocketServer({
         server: httpServer,
-        path: '/graphql',
+        path: '/graphql-ws',
     });
     const serverCleanup = useServer({ schema }, wsServer);
 
@@ -43,7 +46,7 @@ const startApolloServer = async schema => {
     await server.start();
     server.applyMiddleware({
         app,
-        path: '/',
+        path: '/graphql',
     });
 
     await new Promise(res => httpServer.listen({port: 4000}, res));
