@@ -29,9 +29,15 @@ const startApolloServer = async schema => {
     const server = new ApolloServer({
         schema,
         csrfPrevention: true,
-        context: ({req}) => (
-          console.log(req.body.operationName)
-        ),
+        context: ({req}) => {
+          const operationName = req.body.operationName;
+          if (operationName !== 'IntrospectionQuery') {
+            console.log(req.body.operationName);
+          };
+          return {
+            cont: 'returned context',
+          }
+        },
         plugins: [
           ApolloServerPluginDrainHttpServer({httpServer}),
           {

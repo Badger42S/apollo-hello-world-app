@@ -15,7 +15,8 @@ export const resolvers = {
         book(_, args) {
             return books.find(el => el.id === args.id)
         },
-        author(_, args) {
+        author(_, args, {cont}) {
+            console.log(cont);
             return authors.find(el => el.id === args.id)
         }
     },
