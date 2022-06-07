@@ -1,8 +1,18 @@
-import { PubSub } from 'graphql-subscriptions';
+import { AmqpPubSub } from 'graphql-rabbitmq-subscriptions';
 
 import { authors, books } from './simpleData.js'
+import {ConsoleLogger} from "@cdm-logger/server";
 
-const pubsub = new PubSub();
+const settings = {
+  level: "info", // Optional: default 'info' ('trace'|'info'|'debug'|'warn'|'error'|'fatal')
+  mode: "short" // Optional: default 'short' ('short'|'long'|'dev'|'raw')
+}
+
+const logger = ConsoleLogger.create("<app name>", settings);
+const pubsub = new AmqpPubSub({
+    config: "amqp://admin:admin@localhost:5672",
+    logger,
+});
 
 export const resolvers = {
     Query: {

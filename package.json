@@ -9,11 +9,13 @@
   "author": "I",
   "license": "ISC",
   "dependencies": {
+    "@cdm-logger/server": "^7.0.12",
     "@graphql-tools/schema": "^8.3.13",
     "apollo-server-core": "^3.8.1",
     "apollo-server-express": "^3.8.1",
     "express": "^4.18.1",
     "graphql": "^16.5.0",
+    "graphql-rabbitmq-subscriptions": "^1.1.0",
     "graphql-subscriptions": "^2.0.0",
     "graphql-ws": "^5.8.2",
     "ws": "^8.6.0"
