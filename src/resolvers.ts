@@ -1,8 +1,10 @@
-import { PubSub } from 'graphql-subscriptions';
+import { authors, books } from './simpleData'
+import MQ from './rabbitMq/MQ';
 
-import { authors, books } from './simpleData.js'
-
-const pubsub = new PubSub();
+async function rabbit() {
+    await MQ.init('amqp://admin:admin@localhost:5672');
+}
+rabbit();
 
 export const resolvers = {
     Query: {
@@ -36,6 +38,7 @@ export const resolvers = {
             const newLength = authors.push({
                 id: nextId,
                 name: args.name,
+                booksId: []
             });
             const addedAuthor = authors[newLength - 1];
 
@@ -72,7 +75,7 @@ export const resolvers = {
             }
             author.booksId.push(nextBookId);
 
-            pubsub.publish('BOOK_INSERT', {
+            MQ.getMQ().emit('BOOK_INSERT', {
                 bookInsert: newBook
             });
             return books;
@@ -80,7 +83,7 @@ export const resolvers = {
     },
     Subscription: {
         bookInsert: {
-            subscribe: () => pubsub.asyncIterator(['BOOK_INSERT']),
+            subscribe: () => MQ.getMQ().on('BOOK_INSERT')
         }
     }
 };

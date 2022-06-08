@@ -8,7 +8,7 @@ import * as path from 'path';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 
-import { resolvers } from './resolvers.js';
+import { resolvers } from './resolvers';
 
 const typeDefs = readFileSync(path.resolve('schema.graphql'), 'utf8');
 const schema = makeExecutableSchema({ typeDefs,resolvers });
